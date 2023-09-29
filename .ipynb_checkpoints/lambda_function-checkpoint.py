@@ -26,11 +26,11 @@ def build_validation_result(is_valid, violated_slot, message_content):
         "message": {"contentType": "PlainText", "content": message_content},
     }
 
-def validate_data(age, investment_amount, intent_request):
+def validate_data(age, investmentAmount, intent_request):
     # Validate that the user is younger than 65
     if age is not None:
         age = parse_int(age)
-        if age <= 0 or age > 64:
+        if age < 0 or age > 64:
             return build_validation_result(
                 False,
                     "age",
@@ -38,12 +38,12 @@ def validate_data(age, investment_amount, intent_request):
                 )
 
     # Validate the investment amount, it should be > 5000
-    if investment_amount is not None:
-        investment_amount = parse_int(investment_amount)  
-        if investment_amount < 5000:
+    if investmentAmount is not None:
+        investmentAmount = parse_int(investmentAmount)  
+        if investmentAmount < 5000:
             return build_validation_result(
                 False,
-                "investment_amount",
+                "investmentAmount",
                 "The amount to invest should be greater than $5,000"
             )
 
@@ -136,7 +136,7 @@ def recommend_portfolio(intent_request):
 
     first_name = get_slots(intent_request)["firstName"]
     age = get_slots(intent_request)["age"]
-    investment_amount = get_slots(intent_request)["investmentAmount"]
+    investmentAmount = get_slots(intent_request)["investmentAmount"]
     risk_level = get_slots(intent_request)["riskLevel"]
     source = intent_request["invocationSource"]
 
@@ -148,7 +148,7 @@ def recommend_portfolio(intent_request):
 
         ### YOUR DATA VALIDATION CODE STARTS HERE ###
         # Validate user's input using the validate_data function
-        validation_result = validate_data(age, investment_amount, intent_request)
+        validation_result = validate_data(age, investmentAmount, intent_request)
         
         # Use the elicitSlot dialog action to re-prompt
         if not validation_result["isValid"]:
